@@ -1,4 +1,4 @@
-<?php require "../config/database.php" ?>
+
 
 <?php
  
