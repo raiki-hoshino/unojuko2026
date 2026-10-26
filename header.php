@@ -51,7 +51,7 @@
   <style>
     :root {
       --navy: #142947;
-      --blue: #0c6b53;
+      --blue: #00736D;
       --blue-hover: #355784;
       --border: #d9dee7;
       --muted: #858d99;
