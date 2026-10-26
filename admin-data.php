@@ -1,5 +1,7 @@
 <?php
 
+require "header.php";
+
 require "config/database.php";
 
 // 接続に失敗すると $pdo は null のままなので、ここで止める
@@ -126,7 +128,7 @@ foreach ($rows as $r) {
     $history_num = h($r["history_num"]);
 
     $list .= "<tr>
-        <td>{$day}</td>
+    <td>{$day}</td>
         <td class='num'>{$people_num}</td>
         <td class='n'>{$name_view}</td>
         <td class='seatno'>{$history_num}</td>
@@ -150,7 +152,7 @@ $prev_cls = $page <= 1 ? "dis" : "";
 $next_cls = $page >= $pages ? "dis" : "";
 $csv_url  = "admin-data.php?" . http_build_query(array_merge(array_filter($filters, function ($v) { return $v !== ""; }), ["csv" => 1]));
 
-// ---- 画面（echoは1回だけ） ----
+// ---- 画面 ----
 echo "<!DOCTYPE html>
 <html lang='ja'>
 <head>
@@ -170,7 +172,7 @@ echo "<!DOCTYPE html>
     <small>管理者メニュー</small>
     <a href='admin.php'>社員管理</a>
     <a href='admin-change.php'>座席変更</a>
-    <a href='admin-data.php' class='on' aria-current='page'>座席データ閲覧</a>
+    <a href='admin-data.php' aria-current='page'>座席データ閲覧</a>
     <hr>
     <a href='main.php' class='back'>座席図に戻る</a>
 </nav>
@@ -192,7 +194,7 @@ echo "<!DOCTYPE html>
             <div class='row'>
                 <div class='field'><label for='q-num'>社員番号</label><input id='q-num' name='num' value='{$v_num}' placeholder='例：1001' autocomplete='off'></div>
                 <div class='field'><label for='q-name'>名前</label><input id='q-name' name='name' value='{$v_name}' placeholder='姓・名で検索' autocomplete='off'></div>
-                <button class='btn primary' type='submit'><svg viewBox='0 0 24 24'><circle cx='11' cy='11' r='6.5'/><path d='m20 20-4.2-4.2'/></svg>検索</button>
+                <button class='btn primary' type='submit'>検索</button>
                 <a class='btn' href='admin-data.php'>クリア</a>
             </div>
         </form>
@@ -201,7 +203,7 @@ echo "<!DOCTYPE html>
     <section class='card'>
         <div class='listhead'>
             <div class='ttl'><h2>座席登録データ</h2><span class='count'>{$total}件</span></div>
-            <a class='btn csv' href='{$csv_url}'><svg viewBox='0 0 24 24'><path d='M12 4v11M7 11l5 5 5-5M5 20h14'/></svg>CSV出力</a>
+            <a class='btn csv' href='{$csv_url}'>CSV出力</a>
         </div>
         <div class='scroll'>
             <table class='data'>
@@ -212,9 +214,9 @@ echo "<!DOCTYPE html>
         <div class='foot'>
             <span>{$range}</span>
             <div class='pager'>
-                <a class='{$prev_cls}' href='{$prev_url}' aria-label='前のページ'><svg viewBox='0 0 24 24'><path d='m15 6-6 6 6 6'/></svg></a>
+                <a class='{$prev_cls}' href='{$prev_url}' aria-label='前のページ'><</a>
                 <span class='cur'>{$page}</span>
-                <a class='{$next_cls}' href='{$next_url}' aria-label='次のページ'><svg viewBox='0 0 24 24'><path d='m9 6 6 6-6 6'/></svg></a>
+                <a class='{$next_cls}' href='{$next_url}' aria-label='次のページ'>></a>
             </div>
         </div>
     </section>
