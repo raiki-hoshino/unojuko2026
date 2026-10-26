@@ -1,0 +1,175 @@
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.layout {
+display: grid;
+grid-template-columns: 132px minmax(0, 1fr);
+gap: 14px;
+width: 100%;
+min-height: calc(100vh - 70px);
+padding: 32px 26px 0 6px;
+background: #f7f8fa;
+}
+
+/* 階数ナビゲーション */
+.floor-nav {
+display: flex;
+flex-direction: column;
+align-items: stretch;
+min-height: 100%;
+padding: 5px;
+background: #ffffff;
+border: 1px solid #dce2eb;
+border-radius: 8px;
+overflow: hidden;
+}
+
+/* 階数ボタン */
+.floor-nav .floor-button {
+display: block;
+width: 100%;
+min-height: 49px;
+padding: 12px;
+
+border: 1px solid #dce2eb;
+border-bottom: none;
+border-radius: 0;
+
+background-color: #ffffff;
+color: #00736D;
+
+font: inherit;
+font-size: 14px;
+
+cursor: pointer;
+transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* 最初のボタン */
+.floor-nav .floor-button {
+border-radius: 5px 5px 0 0;
+}
+
+/* 最後のボタン */
+.floor-nav .floor-button {
+border-bottom: 1px solid #dce2eb;
+border-radius: 0 0 5px 5px;
+}
+
+/* マウスを乗せたとき */
+.floor-nav .floor-button {
+background-color: #f1f5fa;
+/* border-color: #00736D; */
+}
+.floor-nav .floor-button:hover {
+  border: 3.2px solid #00736D;
+
+}
+
+
+/* 選択中の階 */
+.floor-nav .floor-button[aria-pressed="true"] {
+background-color: #edf3fb;
+color: #00736D;
+font-weight: 700;
+border: 5px solid #00736D;
+}
+
+/* メインパネル */
+
+.main-panel {
+min-width: 0;
+min-height: calc(100vh - 102px);
+padding: 28px 26px;
+background: #fff;
+border: 1px solid #dce2eb;
+border-radius: 8px;
+}
+
+.panel-heading {
+margin: 0 0 20px;
+color: #142947;
+font-size: 20px;
+font-weight: 700;
+}
+
+/* 座席表エリア */
+
+.current-section {
+width: 100%;
+}
+
+.current-heading {
+margin: 0 0 10px;
+text-align: center;
+color: #142947;
+font-size: 14px;
+font-weight: 700;
+}
+
+.image-preview {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100%;
+min-height: 530px;
+padding: 20px;
+border: 1px solid #dce2eb;
+border-radius: 6px;
+background: #fff;
+color: #858d99;
+font-size: 12px;
+text-align: center;
+overflow: auto;
+}
+
+.image-preview img {
+display: block;
+max-width: 100%;
+max-height: 70vh;
+width: auto;
+height: auto;
+object-fit: contain;
+}
+
+.image-preview.has-image {
+align-items: center;
+}
+
+/* スマートフォン対応 */
+
+@media (max-width: 640px) {
+.layout {
+grid-template-columns: 76px minmax(0, 1fr);
+gap: 8px;
+padding: 16px 8px;
+}
+
+.floor-nav {
+padding: 3px;
+}
+
+.floor-button {
+min-height: 44px;
+padding: 8px 3px;
+font-size: 12px;
+}
+
+.main-panel {
+min-height: calc(100vh - 90px);
+padding: 18px 10px;
+}
+
+.panel-heading {
+margin-bottom: 18px;
+font-size: 18px;
+}
+
+.image-preview {
+min-height: 350px;
+padding: 10px;
+}
+}
