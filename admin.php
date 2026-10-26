@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+require "header.php";
 // ---- DB接続（config/database.php で $pdo を作っている） ----
 require "config/database.php";
 
@@ -108,6 +108,7 @@ $v_name = h($q_name);
 // ページ送りのリンク
 $prev_url = "admin.php?" . make_qs($q_num, $q_name, $page - 1);
 $next_url = "admin.php?" . make_qs($q_num, $q_name, $page + 1);
+
 $prev_cls = $page <= 1 ? "dis" : "";
 $next_cls = $page >= $pages ? "dis" : "";
 
@@ -155,9 +156,9 @@ echo "<!DOCTYPE html>
 
 <nav class='side' aria-label='管理者メニュー'>
     <small>管理者メニュー</small>
-    <a href='admin.php' aria-current='page'>社員管理</a>
+    <a href='admin.php'>社員管理</a>
     <a href='admin-change.php'>座席変更</a>
-    <a href='admin-data.php'>座席データ閲覧</a>
+    <a href='admin-data.php'aria-current='page'>座席データ閲覧</a>
     <hr>
     <a href='main.php' class='back'>座席図に戻る</a>
 </nav>
@@ -188,9 +189,9 @@ echo "<!DOCTYPE html>
         <div class='foot'>
             <span>{$range}</span>
             <div class='pager'>
-                <a class='{$prev_cls}' href='{$prev_url}' aria-label='前のページ'></a>
+                <a class='{$prev_cls}' href='{$prev_url}' aria-label='前のページ'><</a>
                 <span class='cur'>{$page}</span>
-                <a class='{$next_cls}' href='{$next_url}' aria-label='次のページ'></a>
+                <a class='{$next_cls}' href='{$next_url}' aria-label='次のページ'>></a>
             </div>
         </div>
     </section>
