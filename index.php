@@ -3,24 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <title>座席管理</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
-<body>
 
 <?php require "config/database.php" ?>
+<?php require "header.php" ?>
 <?php session_start(); ?>
 
-<h1>ログイン画面</h1>
+<div class="box">
+<h1>ログイン</h1>
 
 <form method="post">
-    社員番号<br><input type="text" name="people_num"><p></p>
-    パスワード<br><input type="password" name="password"><p></p><br><p></p>
+    <div class="form_text"><p>社員番号<br><input type="text" name="people_num"><br></p></div>
+    <div class="form_text"><p>パスワード<br><input type="password" name="password"><br></p></div>
     <input type="submit" value="ログイン">
 </form>
 
-<p></p><br><a href="reset_email.php">パスワードを忘れた方</a>
-<p></p><br>
-<p>初めて利用する方<a href="new.php">新規登録</a></p>
+<div class="reset"><p><a href="reset_email.php">パスワードを忘れた方</a></p></div>
+<div class="new"><p>初めて利用する方<a href="new.php">新規登録</a></p></div>
+
+</div>
 
 <?php 
 unset($_SESSION['people']);
@@ -40,9 +42,9 @@ if (isset($_SESSION['people'])) {
     header('Location:main.php');
     exit;
 } else{
-    echo '失敗';
+    echo '';
 }
-
 ?>
+
 </body>
 </html>
