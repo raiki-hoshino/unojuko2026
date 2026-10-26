@@ -222,14 +222,6 @@
     </form>
       <a href="admin.php"><button class="admin-button" id="admin-button" type="button">管理者画面</button></a>
   </header>
-
-  <main class="page-content">
-    <p class="search-status" id="search-status" aria-live="polite"></p>
-    <!-- 検索結果や座席登録画面のコンテンツをここに追加できます -->
-
-
-  </main>
-
   <script>
     const searchForm = document.querySelector("#name-search");
     const searchInput = document.querySelector("#name-query");
