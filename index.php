@@ -7,7 +7,6 @@
 </head>
 
 <?php require "config/database.php" ?>
-<?php require "header.php" ?>
 <?php session_start(); ?>
 
 <div class="login-card">
@@ -31,7 +30,7 @@
     <input type="submit" class="login-button" value="ログイン">
   </form>
 
-  <p class="forgot-link"><a href="#">パスワードを忘れた方</a></p>
+  <p class="forgot-link"><a href="reset-email.php">パスワードを忘れた方</a></p>
   <p class="register-link">初めて利用する方<a href="new.php">新規登録</a></p>
 </div>
 <p class="login-footer">社内専用 座席管理システム</p>

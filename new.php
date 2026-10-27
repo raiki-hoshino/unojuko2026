@@ -69,17 +69,24 @@ if (!empty($err)) {
     }
     echo '</div>';
 }else if(count($err) === 0){
-    //ユーザを登録する処理
-    if (isset($_SESSION['people'])) {
-        $people_id=$_SESSION['people']['people_id'];
-        $sql=$pdo->prepare('select * from people where people_num=?');
-        $sql->execute([$id, $_REQUEST['login']]);
-    } else {
-        $sql=$pdo->prepare('select * from people where people_num=?');
-        $sql->execute([$_REQUEST['people_num']]);
-    }
-    }
+    $sql=$pdo->prepare('select * from people where people_num=?');
+    $sql->execute([$_REQUEST['people_num']]);
+    
+    if (empty($sql->fetchAll())){   
+        $sql=$pdo->prepare('insert into people values(?,?,?,?,?)');
+        $sql->execute([
+            $_REQUEST['people_id'], 
+            $_REQUEST['people_num'],$_REQUEST['name'], 
+            $_REQUEST['mail'], $_REQUEST['password']
+        ]);
+        // 2. データベースが自動で割り振った最新の数字（1, 2, 3... 11）をそのまま取得します
+        $people_id = $pdo->lastInsertId();
 
+        echo 'お客様情報を登録しました。';
+    } else {
+        echo 'このユーザー情報はすでに登録されています。';
+    }
+}
 ?>
 
 
