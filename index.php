@@ -10,19 +10,31 @@
 <?php require "header.php" ?>
 <?php session_start(); ?>
 
-<div class="box">
-<h1>ログイン</h1>
+<div class="login-card">
+  <h1>ログイン</h1>
+  <p class="login-lead">社員番号とパスワードを入力してください。</p>
 
-<form method="post">
-    <div class="form_text"><p>社員番号<br><input type="text" name="people_num"><br></p></div>
-    <div class="form_text"><p>パスワード<br><input type="password" name="password"><br></p></div>
-    <input type="submit" value="ログイン">
-</form>
+  <form method="post">
+    <div class="form-group">
+      <label for="employee">社員番号</label>
+      <input type="text" id="employee" name="employee" placeholder="例：1001">
+    </div>
 
-<div class="reset"><p><a href="reset_email.php">パスワードを忘れた方</a></p></div>
-<div class="new"><p>初めて利用する方<a href="new.php">新規登録</a></p></div>
+    <div class="form-group">
+      <label for="password">パスワード</label>
+      <div class="password-wrap">
+        <input type="password" id="password" name="password" placeholder="パスワードを入力">
+        <button type="button" class="toggle-password" aria-label="パスワードを表示"></button>
+      </div>
+    </div>
 
+    <input type="submit" class="login-button" value="ログイン">
+  </form>
+
+  <p class="forgot-link"><a href="#">パスワードを忘れた方</a></p>
+  <p class="register-link">初めて利用する方<a href="new.php">新規登録</a></p>
 </div>
+<p class="login-footer">社内専用 座席管理システム</p>
 
 <?php 
 unset($_SESSION['people']);
