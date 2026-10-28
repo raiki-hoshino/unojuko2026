@@ -3,14 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>座席管理</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/new.css">
 </head>
 <body>
 
 <?php require "config/database.php" ?>
 <?php session_start(); ?>
-
-<h1>新規登録</h1>
 
 <?php
 $people_num=$name=$mail=$password='';
@@ -21,16 +19,49 @@ if (isset($_SESSION['people'])) {
     $password=$_SESSION['people']['password'];
 }
 
+echo '<div class="login-card">';
+echo '<h1>新規登録</h1>';
+echo '<p class="login-lead">社員情報を入力して、利用を開始しましょう。</p>';
+
 echo '<form method="post">';
-echo '<p>社員番号<br><input type="text" name="new_employee" value="', $people_num,'"></p>';
-echo '<p>姓・名<br><input type="text" name="new_name" value="', $name,'"></p>';
-echo '<p>メールアドレス<br><input type="email" name="new_mail" value="', $mail,'"></p>';
-echo '<p>パスワード<br><input type="password" name="new_password" value="', $password,'"></p>';
-echo '<p>パスワード（確認用）<br><input type="password" name="password_conf"></p>';
-echo '<input type="submit" value="登録">';
+echo '<div class="form-group">';
+echo '<label for="new_employee">社員番号</label>';
+echo '<input type="text" id="new_employee" name="new_employee" value="', $people_num, '">';
+echo '</div>';
+
+echo '<div class="form-group">';
+echo '<label for="new_name">姓・名</label>';
+echo '<input type="text" id="new_name" name="new_name" value="', $name, '">';
+echo '</div>';
+
+echo '<div class="form-group">';
+echo '<label for="new_mail">メールアドレス</label>';
+echo '<input type="email" id="new_mail" name="new_mail" value="', $mail, '">';
+echo '</div>';
+
+echo '<div class="form-group">';
+echo '<label for="new_password">パスワード</label>';
+echo '<div class="password-wrap">';
+echo '<input type="password" id="new_password" name="new_password" value="', $password, '">';
+echo '<button type="button" class="toggle-password" aria-label="パスワードを表示"></button>';
+echo '</div>';
+echo '<p class="form-hint">半角英数字8文字以上で設定してください</p>';
+echo '</div>';
+
+echo '<div class="form-group">';
+echo '<label for="password_conf">パスワード確認</label>';
+echo '<div class="password-wrap">';
+echo '<input type="password" id="password_conf" name="password_conf">';
+echo '<button type="button" class="toggle-password" aria-label="パスワードを表示"></button>';
+echo '</div>';
+echo '</div>';
+
+echo '<input type="submit" class="login-button" value="登録">';
 echo '</form>';
 
-echo '<p><a href="index.php">← ログイン画面に戻る</a></p>';
+echo '<p class="back-link"><a href="index.php">← ログイン画面に戻る</a></p>';
+echo '</div>';
+echo '<p class="login-footer">社内専用 座席管理システム</p>';
 
 // エラー
 $err = [];

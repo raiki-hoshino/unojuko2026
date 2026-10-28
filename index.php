@@ -23,7 +23,8 @@
       <label for="password">パスワード</label>
       <div class="password-wrap">
         <input type="password" id="password" name="password" placeholder="パスワードを入力">
-        <button type="button" class="toggle-password" aria-label="パスワードを表示"></button>
+        <img class="eye-close" src="image/icons8-invisible-48.png">
+        <img class="eye-open" src="image/icons8-目に見える-48.png">
       </div>
     </div>
 
