@@ -10,7 +10,7 @@
 
 </head>
 <body>
-  <main class="layout">
+  <!-- <main class="layout">
     <nav class="floor-nav" aria-label="階を選択">
       <button class="floor-button" type="button" data-floor="3" aria-pressed="false">3階</button>
       <button class="floor-button" type="button" data-floor="2" aria-pressed="false">2階</button>
@@ -19,17 +19,35 @@
 
     <section class="main-panel" aria-labelledby="floor-heading">
       <h2 class="panel-heading" id="floor-heading">1階</h2>
+      <h3 class="current-heading" id="current-heading">座席表</h3>
 
       <section class="current-section" aria-labelledby="current-heading">
-        <h3 class="current-heading" id="current-heading">座席表</h3>
+
         <div class="image-preview" id="image-preview" aria-live="polite">
           座席画像が登録されていません
         </div>
       </section>
     </section>
-  </main>
+  </main> -->
+  <main class="layout">
+  <nav class="floor-nav" aria-label="階を選択">
+    <button class="floor-button" type="button" data-floor="3" aria-pressed="false">3階</button>
+    <button class="floor-button" type="button" data-floor="2" aria-pressed="false">2階</button>
+    <button class="floor-button" type="button" data-floor="1" aria-pressed="true">1階</button>
+  </nav>
 
-  <script>
+  <section class="main-panel" aria-labelledby="floor-heading">
+    <h2 class="panel-heading" id="floor-heading">1階</h2>
+
+<div class="image-preview" id="image-preview">
+  座席画像が登録されていません
+</div>
+
+  </section>
+</main>
+
+
+  <!-- <script>
     const floorButtons = [...document.querySelectorAll(".floor-button")];
     const floorHeading = document.querySelector("#floor-heading");
     const imagePreview = document.querySelector("#image-preview");
@@ -76,7 +94,35 @@
     });
 
     renderFloor();
-  </script>
+  </script> -->
+  <script>
+  function renderFloor() {
+floorHeading.textContent = `${selectedFloor}階`;
+
+floorButtons.forEach((button) => {
+button.setAttribute(
+"aria-pressed",
+String(button.dataset.floor === selectedFloor)
+);
+});
+
+imagePreview.replaceChildren();
+
+const savedImage = localStorage.getItem(
+`seatMapImage_${selectedFloor}`
+);
+
+if (savedImage) {
+const image = document.createElement("img");
+image.src = savedImage;
+image.alt = `${selectedFloor}階の座席画像`;
+imagePreview.appendChild(image);
+} else {
+imagePreview.textContent = "座席画像が登録されていません";
+}
+}
+</script>
+
 </body>
 </html>
 
