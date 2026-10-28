@@ -17,15 +17,22 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Noto Sans JP",
     "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
   color: var(--navy);
-}
+  width: 100%;
+  max-width: 100%;
 
+}
 .site-header {
   display: flex;
   align-items: center;
-  gap: 24px;
+  flex-wrap: nowrap;
+  gap: 12px;
+
   width: 100%;
+  min-width: 0;
   min-height: 80px;
-  padding: 12px 32px;
+  padding: 10px 20px;
+  box-sizing: border-box;
+
   background: var(--surface);
   border-bottom: 1px solid #e5e7eb;
   box-shadow: 0 2px 8px rgb(20 41 71 / 7%);
@@ -33,8 +40,8 @@ body {
 
 .brand {
   flex: 0 0 auto;
-  margin: auto;
-  font-size: 28px;
+  margin: 0;
+  font-size: 26px;
   font-weight: 750;
   letter-spacing: 0.04em;
   white-space: nowrap;
@@ -44,30 +51,32 @@ body {
 .search-form {
   display: flex;
   align-items: stretch;
-  gap: 10px;
-  width: min(48vw, 600px);
-  min-width: 200px;
-  margin: 0 250px;
-  /* margin-left: auto;
-  margin-right: auto; */
+  gap: 8px;
+
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 150px;
+  max-width: none;
+  margin: 0;
 }
 
 .search-field {
   display: flex;
   align-items: center;
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0;
-  height: 46px;
-  gap: 12px;
-  padding: 0 16px;
+  height: 40px;
+  gap: 8px;
+  padding: 0 10px;
+
   border: 1px solid var(--border);
   border-radius: 7px;
   background: #fff;
 }
 
 .search-icon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   flex: 0 0 auto;
   color: #737b87;
 }
@@ -81,25 +90,22 @@ body {
   background: transparent;
   color: var(--navy);
   font: inherit;
-  font-size: 14px;
-}
-
-.search-field input::placeholder {
-  color: var(--muted);
+  font-size: 13px;
 }
 
 .search-button {
-  min-width: 82px;
-  padding: 0 18px;
+  flex: 0 0 auto;
+  min-width: 60px;
+  padding: 0 12px;
   border: 0;
   border-radius: 7px;
   color: #fff;
   background: var(--blue);
   font: inherit;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }
-
 .search-button:hover {
   background: var(--blue-hover);
 }
@@ -107,19 +113,33 @@ body {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex: 0 0 auto;
-}
+  gap: 5px;
 
+  margin-left: auto;
+  flex: 0 0 auto;
+  min-width: 0;
+}
 /* ヘッダーの日付 */
 .header-date {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-flex: 0 0 auto;
-padding: 0 12px;
-white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+
+.date-label {
+  margin-bottom: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.date-value {
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .date-label {
@@ -141,7 +161,7 @@ font-weight: 700;
 .admin-button,
 .logout-button {
   min-height: 38px;
-  padding: 0 14px;
+  padding: 0 10px;
   border: 1px solid #cbd5e2;
   border-radius: 7px;
   background: #fff;
@@ -151,66 +171,88 @@ font-weight: 700;
   font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
+  flex-shrink: 0;
 }
-
-
-
 .zaseki-button:hover,
+
 .admin-button:hover,
+
 .logout-button:hover {
+
   background: #f1f5fa;
+
 }
 
 .header-divider {
   width: 1px;
   height: 28px;
-  margin: 0 12px;
+  margin: 0 4px;
   background: #d5dce5;
+  flex-shrink: 0;
 }
 
 .user-name {
-  margin: 0 12px;
+  margin: 0 4px;
   font-size: 12px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
-
 .page-content {
   padding: 20px;
 }
-
-@media (max-width: 1000px) {
+/* ノートPC・タブレット */
+@media (max-width: 1300px) {
   .site-header {
     flex-wrap: wrap;
-    gap: 14px;
+    gap: 12px;
     padding: 12px 20px;
+  }
+
+  .brand {
+    margin-right: auto;
+  }
+
+  .header-date {
+    padding: 0 8px;
   }
 
   .search-form {
     order: 3;
+    flex: 1 1 100%;
     width: 100%;
+    max-width: none;
     min-width: 0;
     margin: 0;
   }
 
   .header-actions {
     margin-left: auto;
+    flex: 0 1 auto;
   }
 }
 
+/* スマートフォン */
 @media (max-width: 600px) {
   .site-header {
     align-items: stretch;
     flex-direction: column;
+    gap: 12px;
   }
- 
-.header-date {
-align-items: flex-start;
-padding: 4px 0;
-}
-
 
   .brand {
     font-size: 26px;
+    margin-right: 0;
+  }
+
+  .header-date {
+    align-items: flex-start;
+    padding: 4px 0;
+  }
+
+  .search-form {
+    order: initial;
+    flex: 1 1 auto;
+    width: 100%;
   }
 
   .header-actions {
@@ -218,12 +260,7 @@ padding: 4px 0;
     margin-left: 0;
   }
 
-  .search-form {
-    order: initial;
-  }
-
   .header-divider {
     display: none;
   }
 }
-
