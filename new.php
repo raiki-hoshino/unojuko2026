@@ -19,19 +19,82 @@ if (isset($_SESSION['people'])) {
     $password=$_SESSION['people']['password'];
 }
 
+$err = [];
+
+// エラー
+// jsで表示
+if (!empty($_POST)) {
+if(isset($_POST['people'])){
+    $people_num = filter_input(INPUT_POST, 'new_employee');
+    if($people_num == ''){
+        $err[] = '社員番号を入力してください';
+    }
+
+    $name = filter_input(INPUT_POST, 'new_name');
+    if($name == ''){
+        $err[] = 'ユーザ名を入力してください';
+    }
+
+    $mail = filter_input(INPUT_POST, 'new_mail');
+    if($mail == ''){
+        $err[] = 'メールアドレスを入力してください';
+    }
+
+    $password = filter_input(INPUT_POST, 'new_password');
+    if(!preg_match("/\A[a-z\d]{8,50}+\z/i", $password)){
+        $err[] = 'パスワードは英数字８文字以上１００文字以下にしてください。';
+    }
+
+    if("password" != "password_conf"){
+        $err[] = 'パスワードが異なっています';
+    }
+}
+
+if (!empty($err)) {
+    foreach ($err as $msg) {
+        echo '<p>', $msg,'</p><br>';
+    }
+
+}else if(count($err) === 0){
+    $sql=$pdo->prepare('select * from people where people_num=?');
+    $sql->execute([$_REQUEST['people_num']]);
+    
+    if (empty($sql->fetchAll())){   
+        $sql=$pdo->prepare('insert into people values(?,?,?,?,?)');
+        $sql->execute([
+            $_REQUEST['people_id'], 
+            $_REQUEST['people_num'],$_REQUEST['name'], 
+            $_REQUEST['mail'], $_REQUEST['password']
+        ]);
+        // 2. データベースが自動で割り振った最新の数字（1, 2, 3... 11）をそのまま取得します
+        $people_id = $pdo->lastInsertId();
+
+        echo '<p>お客様情報を登録しました。</p>';
+    } else {
+        echo '<p>このユーザー情報はすでに登録されています。</p>';
+    }
+}
+}
+
 echo '<div class="login-card">';
 echo '<h1>新規登録</h1>';
 echo '<p class="login-lead">社員情報を入力して、利用を開始しましょう。</p>';
 
+echo '<div class="err-area">';
+echo '</div>';
+
 echo '<form method="post">';
 echo '<div class="form-group">';
 echo '<label for="new_employee">社員番号</label>';
-echo '<input type="text" id="new_employee" name="new_employee" value="', $people_num, '">';
+echo '<input type="text" id="new_employee" name="new_employee" placeholder="例：0001" value="', $people_num, '">';
+echo '<div id="error-input" aria-live="polite">';
+ini_set('display_errors', '1');
+echo '</div>';
 echo '</div>';
 
 echo '<div class="form-group">';
 echo '<label for="new_name">姓・名</label>';
-echo '<input type="text" id="new_name" name="new_name" value="', $name, '">';
+echo '<input type="text" id="new_name" name="new_name" placeholder="例：宇野　重太" value="', $name, '">';
 echo '</div>';
 
 echo '<div class="form-group">';
@@ -62,62 +125,8 @@ echo '</form>';
 echo '<p class="back-link"><a href="index.php">← ログイン画面に戻る</a></p>';
 echo '</div>';
 echo '<p class="login-footer">社内専用 座席管理システム</p>';
+echo '</div>';
 
-// エラー
-$err = [];
-
-if(isset($_POST['people'])){
-    $password = filter_input(INPUT_POST, 'new_employee');
-    if($people_num == ''){
-        $err[] = '社員番号を入力してください';
-    }
-
-    $password = filter_input(INPUT_POST, 'new_name');
-    if($name == ''){
-        $err[] = 'ユーザ名を入力してください';
-    }
-
-    $password = filter_input(INPUT_POST, 'new_mail');
-    if($mail == ''){
-        $err[] = 'メールアドレスを入力してください';
-    }
-
-    $password = filter_input(INPUT_POST, 'new_password');
-    if(!preg_match("/\A[a-z\d]{8,50}+\z/i", $password)){
-        $err[] = 'パスワードは英数字８文字以上１００文字以下にしてください。';
-    }
-
-    $password = filter_input(INPUT_POST, 'password_conf');
-    if("new_password" != "password_conf"){
-        $err[] = 'パスワードが異なっています';
-    }
-}
-
-if (!empty($err)) {
-    var_dump($err);
-    foreach ($err as $msg) {
-        echo '<p>', $msg,'</p><br>';
-    }
-    echo '</div>';
-}else if(count($err) === 0){
-    $sql=$pdo->prepare('select * from people where people_num=?');
-    $sql->execute([$_REQUEST['people_num']]);
-    
-    if (empty($sql->fetchAll())){   
-        $sql=$pdo->prepare('insert into people values(?,?,?,?,?)');
-        $sql->execute([
-            $_REQUEST['people_id'], 
-            $_REQUEST['people_num'],$_REQUEST['name'], 
-            $_REQUEST['mail'], $_REQUEST['password']
-        ]);
-        // 2. データベースが自動で割り振った最新の数字（1, 2, 3... 11）をそのまま取得します
-        $people_id = $pdo->lastInsertId();
-
-        echo 'お客様情報を登録しました。';
-    } else {
-        echo 'このユーザー情報はすでに登録されています。';
-    }
-}
 ?>
 
 

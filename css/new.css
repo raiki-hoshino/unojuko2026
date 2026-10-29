@@ -118,7 +118,7 @@ input[type="submit"].login-button {
   display: block;
   width: 100%;
   height: 40px;
-  margin-top: 8px;
+  margin-top: 30px;
   border: none;
   border-radius: 6px;
   background: #00736D;
@@ -136,7 +136,7 @@ input[type="submit"].login-button {
 
 /* 「← ログイン画面に戻る」リンク */
 .back-link {
-  margin: 18px 0 0;
+  margin: 19px 0 0;
   text-align: center;
   font-size: 11px;
 }
