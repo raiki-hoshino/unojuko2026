@@ -202,33 +202,97 @@ font-weight: 700;
 }
 /* ノートPC・タブレット */
 @media (max-width: 1300px) {
-  .site-header {
-    flex-wrap: wrap;
-    gap: 12px;
-    padding: 12px 20px;
-  }
+.site-header {
+flex-wrap: nowrap;
+gap: 8px;
+padding: 10px 12px;
+}
 
-  .brand {
-    margin-right: auto;
-  }
+.brand {
+font-size: 27px;
+margin-right: 0;
+}
 
-  .header-date {
-    padding: 0 8px;
-  }
+.header-date {
+padding: 0 4px;
+}
 
-  .search-form {
-    order: 3;
-    flex: 1 1 100%;
-    width: 100%;
-    max-width: none;
-    min-width: 0;
-    margin: 0;
-  }
+.date-label {
+font-size: 10px;
+}
 
-  .header-actions {
-    margin-left: auto;
-    flex: 0 1 auto;
-  }
+.date-value {
+font-size: 13px;
+}
+
+.search-form {
+order: 0;
+flex: 1 1 500px;
+width: 200px;
+min-width: 80px;
+max-width: none;
+margin: 0;
+gap: 5px;
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 40px;
+  gap: 8px;
+  padding: 0 10px;
+
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #fff;
+}
+
+.search-button {
+  flex: 0 0 75px; /* ボタンの幅を75pxにする */
+  min-width: 75px;
+  padding: 0 7px;
+
+  border: 0;
+  border-radius: 7px;
+  color: #fff;
+  background: var(--blue);
+
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.header-actions {
+margin-left: 0;
+flex: 0 0 auto;
+gap: 4px;
+}
+
+.zaseki-button,
+.admin-button,
+.logout-button {
+min-height: 34px;
+padding: 0 6px;
+font-size: 11px;
+
+}
+
+.zaseki-button{
+  margin-right: 2px;
+}
+
+.header-divider {
+margin: 0 2px;
+}
+
+.user-name {
+margin: 0 2px;
+font-size: 11px;
+}
 }
 
 /* スマートフォン */
