@@ -8,6 +8,31 @@
 
 <?php require "config/database.php" ?>
 <?php session_start(); ?>
+<?php
+if (!empty($_POST)) {
+unset($_SESSION['people']);
+$sql=$pdo->prepare('select * from people where people_num=? and password=?');
+$sql->execute([$_REQUEST['people_num'], $_REQUEST['password']]);
+foreach ($sql as $row) {
+    $_SESSION['people']=[
+        'people_id'=>$row['people_id'], 'people_num'=>$row['people_num'],
+        'name'=>$row['name'],'mail'=>$row['mail'],
+        'password'=>$row['password']
+    ];
+}
+
+// ハッシュ化されたパスワードのままログインができてしまってる
+
+if (isset($_SESSION['people'])) {
+    header('Location:main.php');
+    exit;
+} else{
+    echo '<div class="err-login">';
+    echo '<p>社員番号またはパスワードが間違っています</p>';
+    echo '</div>';
+}
+}
+?>
 
 <div class="login-card">
   <h1>ログイン</h1>
@@ -16,15 +41,18 @@
   <form method="post">
     <div class="form-group">
       <label for="employee">社員番号</label>
-      <input type="text" id="employee" name="employee" placeholder="例：1001">
+      <input type="text" id="employee" name="people_num">
     </div>
 
     <div class="form-group">
       <label for="password">パスワード</label>
       <div class="password-wrap">
-        <input type="password" id="password" name="password" placeholder="パスワードを入力">
+        <input type="password" id="password" name="password">
+
+        <!-- jsで表示 -->
         <img class="eye-close" src="image/icons8-invisible-48.png">
         <img class="eye-open" src="image/icons8-目に見える-48.png">
+        
       </div>
     </div>
 
@@ -36,27 +64,7 @@
 </div>
 <p class="login-footer">社内専用 座席管理システム</p>
 
-<?php 
-unset($_SESSION['people']);
-$sql=$pdo->prepare('select * from people where people_num=? and password=?');
-$sql->execute([$_REQUEST['people_num'], $_REQUEST['password']]);
-foreach ($sql as $row) {
-    $_SESSION['people']=[
-        'people_id'=>$row['people_id'], 'people_num'=>$row['people_num'],
-        'name'=>$row['name'], 'password'=>$row['password'],
-        'mail'=>$row['mail']
-    ];
-}
 
-// ハッシュ化されたパスワードのままログインができてしまってる
-
-if (isset($_SESSION['people'])) {
-    header('Location:main.php');
-    exit;
-} else{
-    echo '';
-}
-?>
 
 </body>
 </html>
