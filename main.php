@@ -10,34 +10,24 @@
 
 </head>
 <body>
-  <!-- <main class="layout">
+
+  <main class="layout">
+  <aside class="side-column">
     <nav class="floor-nav" aria-label="階を選択">
       <button class="floor-button" type="button" data-floor="3" aria-pressed="false">3階</button>
       <button class="floor-button" type="button" data-floor="2" aria-pressed="false">2階</button>
       <button class="floor-button" type="button" data-floor="1" aria-pressed="true">1階</button>
     </nav>
 
-    <section class="main-panel" aria-labelledby="floor-heading">
-      <h2 class="panel-heading" id="floor-heading">1階</h2>
-      <h3 class="current-heading" id="current-heading">座席表</h3>
-
-      <section class="current-section" aria-labelledby="current-heading">
-
-        <div class="image-preview" id="image-preview" aria-live="polite">
-          座席画像が登録されていません
-        </div>
-      </section>
+    <section class="away-panel" aria-labelledby="away-heading">
+      <h3 class="away-heading" id="away-heading">外出者一覧</h3>
+      <ul class="away-list" id="away-list">
+        <li class="away-empty">外出中の人はいません</li>
+      </ul>
     </section>
-  </main> -->
-  <main class="layout">
-  <nav class="floor-nav" aria-label="階を選択">
-    <button class="floor-button" type="button" data-floor="3" aria-pressed="false">3階</button>
-    <button class="floor-button" type="button" data-floor="2" aria-pressed="false">2階</button>
-    <button class="floor-button" type="button" data-floor="1" aria-pressed="true">1階</button>
-  </nav>
-
+  </aside>
   <section class="main-panel" aria-labelledby="floor-heading">
-    <h2 class="panel-heading" id="floor-heading">1階</h2>
+    <!-- <h2 class="panel-heading" id="floor-heading">1階</h2> -->
 
 <div class="image-preview" id="image-preview">
   座席画像が登録されていません
@@ -46,81 +36,44 @@
   </section>
 </main>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const floorButtons = document.querySelectorAll(".floor-button");
+  const imagePreview = document.getElementById("image-preview");
 
-  <!-- <script>
-    const floorButtons = [...document.querySelectorAll(".floor-button")];
-    const floorHeading = document.querySelector("#floor-heading");
-    const imagePreview = document.querySelector("#image-preview");
-    let selectedFloor = "1";
+  let selectedFloor = "1";
 
-    // 管理画面側で localStorage に保存した画像を階ごとに表示します。
-    // 保存キー例: seatMapImage_1 / seatMapImage_2 / seatMapImage_3
-    function renderFloor() {
-      floorHeading.textContent = `${selectedFloor}階`;
-      floorButtons.forEach((button) => {
-        button.setAttribute("aria-pressed", String(button.dataset.floor === selectedFloor));
-      });
-
-      imagePreview.replaceChildren();
-      const savedImage = localStorage.getItem(`seatMapImage_${selectedFloor}`);
-
-      if (savedImage) {
-        const image = document.createElement("img");
-        image.src = savedImage;
-        image.alt = `${selectedFloor}階の座席表`;
-        imagePreview.appendChild(image);
-        imagePreview.classList.add("has-image");
-      } else {
-        imagePreview.textContent = "座席画像が登録されていません";
-        imagePreview.classList.remove("has-image");
-      }
-    }
-
-    floorButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        selectedFloor = button.dataset.floor;
-        renderFloor();
-      });
-    });
-
-    document.querySelector("#search-form").addEventListener("submit", (event) => {
-      event.preventDefault();
-      const query = document.querySelector("#name-search").value.trim();
-      if (!query) {
-        document.querySelector("#name-search").focus();
-        return;
-      }
-      alert(`「${query}」の検索機能は、登録者データとの接続後に利用できます。`);
-    });
-
-    renderFloor();
-  </script> -->
-  <script>
   function renderFloor() {
-floorHeading.textContent = `${selectedFloor}階`;
+    floorButtons.forEach((button) => {
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.floor === selectedFloor)
+      );
+    });
 
-floorButtons.forEach((button) => {
-button.setAttribute(
-"aria-pressed",
-String(button.dataset.floor === selectedFloor)
-);
+    imagePreview.replaceChildren();
+
+    const savedImage = localStorage.getItem(`seatMapImage_${selectedFloor}`);
+
+    if (savedImage) {
+      const image = document.createElement("img");
+      image.src = savedImage;
+      image.alt = `${selectedFloor}階の座席画像`;
+      imagePreview.appendChild(image);
+    } else {
+      imagePreview.textContent = `${selectedFloor}階の座席画像が登録されていません`;
+    }
+  }
+
+  floorButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedFloor = button.dataset.floor;
+      renderFloor();
+    });
+  });
+
+  renderFloor();
 });
-
-imagePreview.replaceChildren();
-
-const savedImage = localStorage.getItem(
-`seatMapImage_${selectedFloor}`
-);
-
-if (savedImage) {
-const image = document.createElement("img");
-image.src = savedImage;
-image.alt = `${selectedFloor}階の座席画像`;
-imagePreview.appendChild(image);
-} else {
-imagePreview.textContent = "座席画像が登録されていません";
-}
-}
 </script>
 
 </body>
