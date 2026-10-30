@@ -46,6 +46,11 @@ body {
   letter-spacing: 0.04em;
   white-space: nowrap;
   color: #00736D;
+  
+}
+
+.brand-main{
+    text-decoration: none;
 }
 
 .search-form {

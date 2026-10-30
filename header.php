@@ -1,7 +1,9 @@
 
 <header class="site-header">
   <link rel="stylesheet" href="css/header.css">
-  <h1 class="brand">宇野重工</h1>
+  <a href="main.php" class="brand-main">
+    <h1 class="brand">宇野重工</h1>
+  </a>
 
   <div class="header-date" id="header-date">
   <span class="date-label">本日の日付</span>
