@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>座席管理</title>
-<link rel="stylesheet" href="css/reset-email-code.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 

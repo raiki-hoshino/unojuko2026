@@ -23,7 +23,7 @@ body {
 .login-card {
   width: 100%;
   max-width: 420px;
-  padding: 40px 32px 22.5px;
+  padding: 36px 32px 22.5px;
   background: #fff;
   border-radius: 6px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
@@ -130,7 +130,7 @@ input[type="submit"].login-button {
   margin-top: 30px;
   border: none;
   border-radius: 6px;
-  background: #006f69;
+  background: #00736D;
   color: #fff;
   font-size: 13px;
   font-weight: 700;
@@ -156,7 +156,7 @@ input[type="submit"].login-button:active{
 
 .forgot-link a,
 .register-link a {
-  color: #26776a;
+  color: #00736D;
   text-decoration: none;
 }
 
@@ -207,6 +207,37 @@ input[type="submit"].login-button:active{
   text-align: center;
   
 }
+
+
+/* new.php*/
+/* 入力欄の下の補足文（例：半角英数字8文字以上） */
+.form-hint {
+  margin: 6px 0 0;
+  font-size: 10px;
+  color: #7a8787;
+  line-height: 1.5;
+}
+
+/* 「← ログイン画面に戻る」リンク */
+.back-link {
+  margin: 19px 0 0;
+  text-align: center;
+  font-size: 11px;
+}
+
+.back-link a {
+  color: #00736D;
+  text-decoration: none;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
+}
+
+
+
+
+
 
 /* スマホ対応 */
 @media (max-width: 480px) {

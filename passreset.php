@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>座席管理</title>
-<link rel="stylesheet" href="css/reset-email-code.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
@@ -17,11 +17,19 @@
   <form method="post">
     <div class="form-group">
       <label for="password">パスワード</label>
+      <div class="password-wrap">
       <input type="password" id="password" name="password">
+      <img class="eye-close" src="image/icons8-invisible-48.png">
+      <img class="eye-open" src="image/icons8-目に見える-48.png">
+    </div>
     </div>
     <div class="form-group">
       <label for="password">パスワード（確認用）</label>
+      <div class="password-wrap">
       <input type="password" id="password-conf" name="password-conf">
+      <img class="eye-close" src="image/icons8-invisible-48.png">
+      <img class="eye-open" src="image/icons8-目に見える-48.png">
+    </div>
     </div>
 
     <input type="submit" class="login-button" value="送信">
