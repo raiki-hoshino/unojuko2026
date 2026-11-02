@@ -1,5 +1,5 @@
 <?php
-
+//データベース
 require "config/database.php";
 
 $uploadDir = __DIR__ . '/uploads';
