@@ -1,7 +1,9 @@
 
 <header class="site-header">
   <link rel="stylesheet" href="css/header.css">
-  <h1 class="brand">宇野重工</h1>
+  <a href="main.php" class="brand-main">
+    <h1 class="brand">宇野重工</h1>
+  </a>
 
   <div class="header-date" id="header-date">
   <span class="date-label">本日の日付</span>
@@ -31,13 +33,14 @@
   </form>
 
   <div class="header-actions">
-    <button class="zaseki-button" type="button">座席画面</button>
-    <button class="admin-button" type="button">管理者画面</button>
+    <a href="main.php" ><button class="zaseki-button" type="button" >座席画面</button></a>
+    <a href="admin.php"><button class="admin-button" type="button">管理画面</button></a>
 
     <div class="header-divider"></div>
 
     <span class="user-name">山田 太郎 さん</span>
 
+    <a href="index.php">
     <button
       class="logout-button"
       type="button"
@@ -45,6 +48,7 @@
     >
       ログアウト
     </button>
+    </a>
   </div>
 </header>
 <!DOCTYPE html>
