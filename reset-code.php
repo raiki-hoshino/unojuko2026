@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>座席管理</title>
-<link rel="stylesheet" href="css/reset-email-code.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
@@ -19,7 +19,8 @@
       <label for="code">認証コード</label>
       <div class="password-wrap">
         <input type="password" id="code" name="code" placeholder="○○○○">
-        <button type="button" class="toggle-password" aria-label="認証コードを表示"></button>
+        <img class="eye-close" src="image/icons8-invisible-48.png">
+        <img class="eye-open" src="image/icons8-目に見える-48.png">
       </div>
     </div>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>座席管理</title>
-<link rel="stylesheet" href="css/new.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
@@ -109,7 +109,8 @@ echo '<div class="form-group">';
 echo '<label for="new_password">パスワード</label>';
 echo '<div class="password-wrap">';
 echo '<input type="password" id="new_password" name="password" value="', $password, '">';
-echo '<button type="button" class="toggle-password" aria-label="パスワードを表示"></button>';
+echo '<img class="eye-close" src="image/icons8-invisible-48.png">';
+echo '<img class="eye-open" src="image/icons8-目に見える-48.png">';
 echo '</div>';
 echo '<p class="form-hint">半角英数字8文字以上で設定してください</p>';
 echo '</div>';
@@ -118,11 +119,12 @@ echo '<div class="form-group">';
 echo '<label for="password_conf">パスワード（確認用）</label>';
 echo '<div class="password-wrap">';
 echo '<input type="password" id="password_conf" name="password_conf">';
-echo '<button type="button" class="toggle-password" aria-label="パスワードを表示"></button>';
+echo '<img class="eye-close" src="image/icons8-invisible-48.png">';
+echo '<img class="eye-open" src="image/icons8-目に見える-48.png">';
 echo '</div>';
 echo '</div>';
 
-echo '<input type="submit" class="new-button" value="登録">';
+echo '<input type="submit" class="login-button" value="登録">';
 echo '</form>';
 
 echo '<p class="back-link"><a href="index.php">← ログイン画面に戻る</a></p>';
