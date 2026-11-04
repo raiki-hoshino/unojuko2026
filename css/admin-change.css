@@ -148,3 +148,103 @@ main > form button:focus-visible,
   main > form{flex-direction:column;align-items:stretch}
   input[type="file"]{flex:none;width:100%}
 }
+
+/* ===================== 座席配置エディタ ===================== */
+
+/* 画像を広く使う：横幅の上限をなくし、余白を詰める */
+main{max-width:none;padding:16px 16px 20px}
+.main-panel{padding:8px}
+.image-preview{padding:8px}
+.image-preview.has-image{padding:4px}
+
+/* 上部の設定バー */
+.seat-toolbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;
+  padding:10px 12px;margin-bottom:12px;
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+}
+.seat-toolbar .floor-nav{margin:0}
+
+.current{
+  display:flex;align-items:baseline;gap:8px;
+  min-width:96px;padding:5px 12px;
+  background:var(--accent-soft);border-radius:8px;
+}
+.current span{font-size:11px;color:var(--accent)}
+.current strong{font-size:16px;line-height:1.4;color:var(--accent);word-break:break-all}
+
+.seat-toolbar input[type="text"]{
+  width:160px;height:34px;padding:0 12px;
+  border:1px solid var(--border);border-radius:8px;
+  background:var(--surface);color:var(--text);
+  font:inherit;font-size:12px;
+}
+.seat-toolbar input[type="text"]::placeholder{color:var(--muted);opacity:.75}
+.seat-toolbar input[type="text"]:focus-visible,
+.seat-toolbar .btn:focus-visible,
+.seat:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.seat-toolbar .btn{
+  height:34px;padding:0 14px;
+  border:1px solid var(--border);border-radius:8px;
+  background:var(--surface);color:var(--text);
+  font:inherit;font-size:12px;font-weight:500;line-height:1;cursor:pointer;
+}
+.seat-toolbar .btn:hover:not(:disabled){filter:brightness(.95)}
+.seat-toolbar .btn:disabled{opacity:.45;cursor:not-allowed}
+.seat-toolbar .btn.primary{
+  margin-left:auto;padding:0 20px;
+  background:var(--accent);border-color:var(--accent);color:var(--accent-ink);
+}
+
+.save-msg{margin:0;font-size:11px;color:var(--accent)}
+.save-msg:empty{display:none}
+.save-msg.error{color:#c0392b}
+
+/* 座席表（ステージ） */
+.stage{position:relative;width:100%;line-height:0}
+.stage img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
+.stage.empty{
+  aspect-ratio:5/3;display:flex;align-items:center;justify-content:center;
+  line-height:1.6;color:var(--muted);font-size:12px;
+}
+.stage.empty p{margin:0}
+
+.seat-layer{position:absolute;inset:0;pointer-events:none}
+
+/* 座席（ドラッグできるチップ） */
+.seat{
+  position:absolute;transform:translate(-50%,-50%);
+  min-width:34px;height:26px;padding:0 8px;
+  border:1.5px solid var(--accent);border-radius:8px;
+  background:var(--surface);color:var(--accent);
+  font:inherit;font-size:11px;font-weight:700;line-height:1;
+  box-shadow:0 1px 3px rgba(0,0,0,.25);
+  cursor:grab;touch-action:none;user-select:none;pointer-events:auto;
+}
+.seat:active{cursor:grabbing}
+.seat.selected{background:var(--accent);color:var(--accent-ink);z-index:2}
+
+@media (max-width:720px){
+  main{padding:12px 8px 16px}
+  .seat-toolbar .btn.primary{margin-left:0}
+}
+
+/* ===================== 未配置の座席置き場（下部） ===================== */
+.seat-tray{
+  margin-top:12px;padding:12px 14px;
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  transition:background .15s,border-color .15s;
+}
+.seat-tray.drop{border-color:var(--accent);background:var(--accent-soft)}
+
+.tray-head{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+.tray-head h2{margin:0;font-size:13px;font-weight:700}
+.tray-count{font-size:11px;color:var(--muted)}
+.tray-hint{margin:0 0 10px;font-size:11px;color:var(--muted)}
+
+.tray-list{display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px;min-height:36px}
+.tray-list:empty::before{
+  content:"未配置の座席はありません";
+  font-size:11px;color:var(--muted);line-height:36px;
+}
