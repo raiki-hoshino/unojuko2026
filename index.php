@@ -4,23 +4,34 @@
 <meta charset="UTF-8">
 <title>座席管理</title>
 <link rel="stylesheet" href="css/index.css">
+<script src="js/index.js" defer></script>
 </head>
+<body>
 
 <?php require "config/database.php" ?>
 <?php session_start(); ?>
+
 <?php
+if ($pdo === null) {
+    echo "データベースに接続できません。";
+    exit;
+}
 if (!empty($_POST)) {
 unset($_SESSION['people']);
-$sql=$pdo->prepare('select * from people where people_num=? and password=?');
-$sql->execute([$_REQUEST['people_num'], $_REQUEST['password']]);
-foreach ($sql as $row) {
-    $_SESSION['people']=[
-        'people_id'=>$row['people_id'], 'people_num'=>$row['people_num'],
-        'name'=>$row['name'],'mail'=>$row['mail'],
-        'password'=>$row['password']
-    ];
-}
+$sql=$pdo->prepare('select * from people where people_num=?');
+$sql->execute([$_REQUEST['people_num']]);
 
+foreach ($sql as $row) {
+  if (password_verify($_POST['password'], $row['password'])){
+    $_SESSION['people']=[
+        'people_id'=>$row['people_id'], 
+        'people_num'=>$row['people_num'],
+        'name'=>$row['name'],
+        'mail'=>$row['mail']
+    ];
+  session_regenerate_id(true);
+  }
+}
 // ハッシュ化されたパスワードのままログインができてしまってる
 
 if (isset($_SESSION['people'])) {
@@ -38,7 +49,7 @@ if (isset($_SESSION['people'])) {
   <h1>ログイン</h1>
   <p class="login-lead">社員番号とパスワードを入力してください。</p>
 
-  <form method="post">
+  <form class="form-wrap" method="post">
     <div class="form-group">
       <label for="employee">社員番号</label>
       <input type="text" id="employee" name="people_num">
@@ -47,12 +58,10 @@ if (isset($_SESSION['people'])) {
     <div class="form-group">
       <label for="password">パスワード</label>
       <div class="password-wrap">
-        <input type="password" id="password" name="password">
-
+        <input type="password" class="password-input" id="password" name="password">
         <!-- jsで表示 -->
         <img class="eye-close" src="image/icons8-invisible-48.png">
-        <img class="eye-open" src="image/icons8-目に見える-48.png">
-        
+        <img class="eye-open" src="image/icons8-目に見える-48.png" style="display: none;">
       </div>
     </div>
 
@@ -63,7 +72,6 @@ if (isset($_SESSION['people'])) {
   <p class="register-link">初めて利用する方<a href="new.php">新規登録</a></p>
 </div>
 <p class="login-footer">社内専用 座席管理システム</p>
-
 
 
 </body>

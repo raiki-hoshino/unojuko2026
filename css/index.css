@@ -80,45 +80,21 @@ body {
 }
 
 /* パスワード表示切替（目のアイコン） */
-.password-wrap {
+.password-wrap{
   position: relative;
 }
 
 .password-wrap img {
   position: absolute;
-  top: 54.5%;
-  right: 11px;
+  top: 50%;
+  right: 10px;
 	transform: translateY(-50%);
-  width: 17px;
+  width: 15px;
+  cursor: pointer;
 }
 
-.toggle-password {
-  position: absolute;
-  top: 52%;
-  right: 12px;
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  border: none;
-  background: transparent url("../image/icons8-目に見える-48.png") center / 18px 18px no-repeat;
-  transform: translateY(-50%);
-  
-}
-
-.eye-close:before{
-  display: inline;
-}
-
-.eye-close:after{
-  display: none;
-}
-
-.eye-open:before{
-  display: none;
-}
-
-.eye-open:after{
-  display: inline;
+.password-wrap input {
+  padding-right: 36px;
 }
 
 /* ログインボタン */
@@ -196,18 +172,33 @@ input[type="submit"].login-button:active{
   background: rgb(251, 220, 216);
   width: 100%;
   max-width: 420px;
-  padding: 2px 32px 2px;
+  padding: 6px 32px 6px;
   border-radius: 6px;
   /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04); */
   margin-top: 3px;
 }
 
 .err-login p{
+  margin: 6px 0;
   color: rgb(236, 0, 0);
-  text-align: center;
-  
+  text-align: left;
 }
 
+.new-login{
+  background: rgb(216, 233, 251);
+  width: 100%;
+  max-width: 420px;
+  padding: 6px 32px 6px;
+  border-radius: 6px;
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04); */
+  margin-top: 3px;
+}
+
+.new-login p{
+  margin: 6px 0;
+  color: rgb(0, 126, 236);
+  text-align: left;
+}
 
 /* new.php*/
 /* 入力欄の下の補足文（例：半角英数字8文字以上） */
