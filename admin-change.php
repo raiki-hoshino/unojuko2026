@@ -145,6 +145,25 @@ $st = $pdo->prepare('SELECT seat_num, seat_x, seat_y FROM seat WHERE floor = ? O
 $st->execute([$floor]);
 $seats = $st->fetchAll(PDO::FETCH_ASSOC);
 
+// seat_x / seat_y の「初期値（DEFAULT）」を取得：初期値のままの座席は未配置として扱う
+$seatDefault = ['seat_x' => null, 'seat_y' => null];
+try {
+    $st = $pdo->query(
+        "SELECT COLUMN_NAME, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS
+         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'seat'
+           AND COLUMN_NAME IN ('seat_x', 'seat_y')"
+    );
+    foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $col) {
+        $d = $col['COLUMN_DEFAULT'];
+        if ($d !== null) {
+            $d = trim((string)$d, "'\"");   // MariaDB は '0' のように引用符付きで返す
+        }
+        $seatDefault[$col['COLUMN_NAME']] = ($d === null || !is_numeric($d)) ? null : (float)$d;
+    }
+} catch (PDOException $e) {
+    // 取得できなくても、NULL と 0,0 は未配置として扱うので動作は続行
+}
+
 require "header.php";
 ?>
 
@@ -206,7 +225,15 @@ require "header.php";
     <button type="button" class="btn primary" id="save-seats">変更を保存</button>
     <p class="save-msg" id="save-msg" role="status"></p>
 </div>
-
+<!-- 下部: 未配置の座席置き場（読み込み直後・追加直後の座席がここに並ぶ） -->
+<section class="seat-tray" id="seat-tray-wrap" aria-label="未配置の座席">
+    <div class="tray-head">
+        <h2>未配置の座席</h2>
+        <span class="tray-count"><span id="tray-count">0</span>件</span>
+    </div>
+    <p class="tray-hint">座席カードを上の座席図へドラッグして配置します。配置済みの座席をここへドラッグして戻すこともできます。</p>
+    <div class="tray-list" id="seat-tray"></div>
+</section>
 <!-- 座席表（座席をドラッグして移動） -->
 <section class="main-panel" aria-label="<?= $floor ?>階の座席表">
     <div class="image-preview<?= $imageUrl ? ' has-image' : '' ?>">
@@ -222,15 +249,7 @@ require "header.php";
     </div>
 </section>
 
-<!-- 下部: 未配置の座席置き場（読み込み直後・追加直後の座席がここに並ぶ） -->
-<section class="seat-tray" id="seat-tray-wrap" aria-label="未配置の座席">
-    <div class="tray-head">
-        <h2>未配置の座席</h2>
-        <span class="tray-count"><span id="tray-count">0</span>件</span>
-    </div>
-    <p class="tray-hint">座席カードを上の座席図へドラッグして配置します。配置済みの座席をここへドラッグして戻すこともできます。</p>
-    <div class="tray-list" id="seat-tray"></div>
-</section>
+
 </main>
 </div>
 
@@ -238,6 +257,8 @@ require "header.php";
 (() => {
   const FLOOR = <?= (int)$floor ?>;
   const DATA  = <?= json_encode($seats, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
+  const DEFAULT_X = <?= json_encode($seatDefault['seat_x']) ?>;   // seat_x の初期値（なければ null）
+  const DEFAULT_Y = <?= json_encode($seatDefault['seat_y']) ?>;   // seat_y の初期値（なければ null）
 
   const stage     = document.getElementById('stage');
   const layer     = document.getElementById('seat-layer');
@@ -260,6 +281,12 @@ require "header.php";
 
   // 座標は「画像の元サイズ（px）」基準で保存する（表示サイズが変わっても位置がずれない）
   let W = 1000, H = 600;
+
+  // 座席カードの大きさは「座席図の表示幅」に比例して拡縮する（画像との位置関係を保つ）
+  //   表示幅が BASE_WIDTH のとき等倍。MIN_SCALE より小さくはしない（読めなくなるため）
+  const BASE_WIDTH = 1000;
+  const MIN_SCALE  = window.matchMedia('(pointer: coarse)').matches ? 0.7 : 0.5;
+  let scale = 1;
   let seats = [];      // { num, x, y, placed, el }  placed=false は「未配置」
   let selected = null;
 
@@ -271,6 +298,10 @@ require "header.php";
   const inside = (box, e) => {
     const r = box.getBoundingClientRect();
     return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+  };
+  const rawStage = e => {            // 範囲で丸めない座標（つかんだ位置の補正用）
+    const r = stage.getBoundingClientRect();
+    return { x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H };
   };
   const toStage = e => {
     const r = stage.getBoundingClientRect();
@@ -287,6 +318,25 @@ require "header.php";
     delBtn.disabled = !seat;
   }
 
+  // 座席図の上のカードだけ、表示幅に合わせた大きさにする（未配置エリアは通常サイズ）
+  function sizeChip(el, placed) {
+    const st = el.style;
+    if (!placed) {
+      st.minWidth = st.height = st.padding = st.fontSize = st.borderRadius = '';
+      return;
+    }
+    st.minWidth     = (34 * scale) + 'px';
+    st.height       = (26 * scale) + 'px';
+    st.padding      = '0 ' + (8 * scale) + 'px';
+    st.fontSize     = (11 * scale) + 'px';
+    st.borderRadius = (8 * scale) + 'px';
+  }
+  function updateScale() {
+    const w = stage.getBoundingClientRect().width || BASE_WIDTH;
+    scale = clamp(w / BASE_WIDTH, MIN_SCALE, 2);
+    seats.forEach(s => s.el && sizeChip(s.el, s.placed));
+  }
+
   // 座席を「座席図の上」か「未配置エリア」のどちらかに置く
   function applyMode(seat) {
     const el = seat.el;
@@ -296,9 +346,11 @@ require "header.php";
         left: (seat.x / W * 100) + '%', top: (seat.y / H * 100) + '%'
       });
       if (el.parentNode !== layer) layer.appendChild(el);
+      sizeChip(el, true);
     } else {
       Object.assign(el.style, { position: 'static', transform: 'none', left: '', top: '' });
       if (el.parentNode !== tray) tray.appendChild(el);
+      sizeChip(el, false);
     }
     trayCount.textContent = seats.filter(s => !s.placed).length;
   }
@@ -318,7 +370,12 @@ require "header.php";
       if (e.button > 0) return;
       el.setPointerCapture(e.pointerId);
       select(seat);
-      drag = { ghost: null };
+      drag = { ghost: null, dx: 0, dy: 0 };
+      if (seat.placed) {                       // カードの中心とつかんだ位置の差を覚えておく
+        const q = rawStage(e);
+        drag.dx = seat.x - q.x;
+        drag.dy = seat.y - q.y;
+      }
       e.preventDefault();
     });
 
@@ -326,8 +383,9 @@ require "header.php";
       if (!drag) return;
       if (seat.placed) {
         // 配置済み：座席図の上でそのまま動かす（未配置エリアの上なら枠を強調）
-        const p = toStage(e);
-        seat.x = p.x; seat.y = p.y;
+        const q = rawStage(e);
+        seat.x = clamp(Math.round(q.x + drag.dx), 0, W);
+        seat.y = clamp(Math.round(q.y + drag.dy), 0, H);
         applyMode(seat);
         trayWrap.classList.toggle('drop', inside(trayWrap, e));
       } else {
@@ -339,6 +397,7 @@ require "header.php";
             position: 'fixed', transform: 'translate(-50%, -50%)',
             pointerEvents: 'none', zIndex: '1000', opacity: '.9'
           });
+          sizeChip(g, true);
           document.body.appendChild(g);
           drag.ghost = g;
           el.style.opacity = '.4';
@@ -373,10 +432,15 @@ require "header.php";
     seats = DATA.map(d => {
       const x = d.seat_x === null || d.seat_x === '' ? null : Number(d.seat_x);
       const y = d.seat_y === null || d.seat_y === '' ? null : Number(d.seat_y);
-      // 座標が未設定（NULL または 0,0）の座席は「未配置」として下のエリアに並べる
-      const placed = !(x === null || y === null || (x === 0 && y === 0));
+      // 初期値のまま（NULL・0,0・テーブルの初期値と同じ）の座席は「未配置」として下のエリアに並べる
+      const isDefault =
+        x === null || y === null ||
+        (x === 0 && y === 0) ||
+        (DEFAULT_X !== null && DEFAULT_Y !== null && x === DEFAULT_X && y === DEFAULT_Y);
+      const placed = !isDefault;
       return { num: String(d.seat_num), x: placed ? x : null, y: placed ? y : null, placed, el: null };
     });
+    updateScale();
     seats.forEach(createEl);
   }
 
@@ -391,6 +455,10 @@ require "header.php";
     img.addEventListener('load', ready, { once: true });
     img.addEventListener('error', ready, { once: true });
   }
+
+  // 画面幅・向きが変わったら、カードの大きさを追従させる
+  if ('ResizeObserver' in window) new ResizeObserver(updateScale).observe(stage);
+  else window.addEventListener('resize', updateScale);
 
   // 空いている場所をクリックしたら選択解除
   stage.addEventListener('pointerdown', e => {
