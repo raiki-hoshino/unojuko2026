@@ -23,11 +23,11 @@ body {
 .login-card {
   width: 100%;
   max-width: 420px;
-  padding: 36px 32px 22.5px;
+  padding: 38px 32px 25px;
   background: #fff;
   border-radius: 6px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-  margin-top: 4px;
+  margin-top: 11px;
 }
 
 .login-card h1 {
@@ -39,7 +39,7 @@ body {
 }
 
 .login-lead {
-  margin: 0 0 24px;
+  margin: 0 0 26px;
   font-size: 12px;
   color: #7a8787;
 }
@@ -94,7 +94,7 @@ body {
 }
 
 .password-wrap input {
-  padding-right: 36px;
+  padding-right: 34.5px;
 }
 
 /* ログインボタン */
@@ -226,13 +226,60 @@ input[type="submit"].login-button:active{
 }
 
 
-
-
-
-
 /* スマホ対応 */
-@media (max-width: 480px) {
-  .login-card {
-    padding: 28px 20px 24px;
+@media(max-width: 768px) {
+  body {
+  padding: 20px 20px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+  .login-card{
+    width: 100%;
+    max-width: 480px;
+    padding: 38px 28px 24px;
+    margin-top: 40px;
+  }
+
+  .login-card h1{
+    font-size: 26px;
+  }
+
+  .login-lead{
+    font-size: 11px;
+  }
+
+  .form-group label {
+    font-size: 13.5px;
+    margin-top: 25px;
+  }
+
+  .form-group input {
+    font-size: 15px;
+  }
+
+  .login-button,
+input[type="submit"].login-button {
+  display: block;
+  width: 100%;
+  height: 47px;
+  margin-top: 33px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+  .register-link{
+    padding-top: 22px;
+    font-size: 12px;
+  }
+
+  .back-link {
+    margin: 25px 0 0;
+    font-size: 13px;
   }
 }

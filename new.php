@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>座席管理</title>
 <link rel="stylesheet" href="css/index.css">
+<script src="js/index.js" defer></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
@@ -47,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $err[] = 'メールアドレスの形式が正しくありません';
         }
 
-        if(!preg_match("/\A[a-z\d]{8,100}+\z/i", $password)){
-            $err[] = 'パスワードは英数字８～５０文字にしてください';
+        if(!preg_match('/\A(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,50}+\z/', $password)){
+            $err[] = 'パスワードは半角数字８～５０文字にしてください';
         }
 
         if($password !== $password_conf){
@@ -63,8 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         echo '</div>';
     }else if(empty($err)) {
-        $sql = $pdo->prepare('select * from people where people_num=?');
-        $sql->execute([$people_num]);
+        $sql = $pdo->prepare('select * from people where people_num=? or mail=?');
+        $sql->execute([$people_num, $mail]);
 
         if($sql->fetch()) {
             echo '<div class="err-login" id="err-login">';
@@ -87,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 echo '<div class="login-card">';
 echo '<h1>新規登録</h1>';
-echo '<p class="login-lead">社員情報を入力して、利用を開始しましょう。</p>';
+echo '<p class="login-lead">社員情報を入力してください。</p>';
 
 echo '<form method="post">';
 echo '<div class="form-group">';
@@ -108,19 +110,19 @@ echo '</div>';
 echo '<div class="form-group">';
 echo '<label for="new_password">パスワード</label>';
 echo '<div class="password-wrap">';
-echo '<input type="password" id="new_password" name="new_password" value="', $password, '">';
+echo '<input type="password" class="password-input" id="new_password" name="new_password" value="', $password, '">';
 echo '<img class="eye-close" src="image/icons8-invisible-48.png">';
-echo '<img class="eye-open" src="image/icons8-目に見える-48.png">';
+echo '<img class="eye-open" src="image/icons8-目に見える-48.png" style="display: none;">';
 echo '</div>';
-echo '<p class="form-hint">半角英数字8文字以上で設定してください</p>';
+echo '<p class="form-hint">・半角の大文字・小文字・数字を含めてください<br>・8文字以上50文字以下で入力してください</p>';
 echo '</div>';
 
 echo '<div class="form-group">';
 echo '<label for="password_conf">パスワード（確認用）</label>';
 echo '<div class="password-wrap">';
-echo '<input type="password" id="password_conf" name="new_password_conf">';
+echo '<input type="password" class="password-input" id="password_conf" name="new_password_conf">';
 echo '<img class="eye-close" src="image/icons8-invisible-48.png">';
-echo '<img class="eye-open" src="image/icons8-目に見える-48.png">';
+echo '<img class="eye-open" src="image/icons8-目に見える-48.png" style="display: none;">';
 echo '</div>';
 echo '</div>';
 
