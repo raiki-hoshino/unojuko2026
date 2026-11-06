@@ -1,8 +1,14 @@
 <?php
-session_start();
+
 require "header.php";
 // ---- DB接続（config/database.php で $pdo を作っている） ----
 require "config/database.php";
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once __DIR__ . '/config/auth.php';   // isAdmin() を使うため
+
 
 // 接続に失敗すると $pdo は null のままなので、ここで止める
 if ($pdo === null) {
