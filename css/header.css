@@ -58,13 +58,20 @@ body {
   align-items: stretch;
   gap: 8px;
 
-  flex: 1 1 auto;
-  width: auto;
-  min-width: 150px;
-  max-width: none;
+  flex: 0 1 auto;
+  width: 300px;
+  min-width: 15px;
+  max-width: 100%;
   margin: 0;
 }
 
+.search-form.name-search {
+  flex: 0 1 500px;
+  width: 500px;         /* ← 追加 */
+  min-width: 0;
+  margin-right: auto;
+  margin-left: 40px;
+}
 .search-field {
   display: flex;
   align-items: center;
@@ -97,6 +104,7 @@ body {
   font: inherit;
   font-size: 13px;
 }
+
 
 .search-button {
   flex: 0 0 auto;
@@ -196,6 +204,7 @@ font-weight: 700;
   flex-shrink: 0;
 }
 
+
 .user-name {
   margin: 0 4px;
   font-size: 12px;
@@ -231,20 +240,31 @@ font-size: 13px;
 }
 
 .search-form {
-order: 0;
-flex: 1 1 500px;
-width: 200px;
-min-width: 80px;
-max-width: none;
-margin: 0;
-gap: 5px;
+  order: 0;
+  flex: 0 1 auto;      /* ← 1 1 500px から変更 */
+  width: 200px;
+  min-width: 80px;
+  max-width: none;
+  margin: 0;
+  gap: 5px;
+}
+  .search-form.name-search {
+    flex: 0 1 420px;
+    width: 420px;
+    margin-left: 20px;
+  }
+
+.header-actions {
+  margin-left: auto;   /* ← 0 から auto に変更 */
+  flex: 0 0 auto;
+  gap: 4px;
 }
 
 .search-field {
   display: flex;
   align-items: center;
 
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
   height: 40px;
   gap: 8px;
@@ -271,11 +291,7 @@ gap: 5px;
   cursor: pointer;
 }
 
-.header-actions {
-margin-left: 0;
-flex: 0 0 auto;
-gap: 4px;
-}
+
 
 .zaseki-button,
 .admin-button,
@@ -332,4 +348,22 @@ font-size: 11px;
   .header-divider {
     display: none;
   }
+}
+
+.search-field input[type="text"],
+.search-field input[type="search"] {
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* 検索欄の × ボタンを非表示 */
+.search-field input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
 }

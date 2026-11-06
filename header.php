@@ -16,7 +16,26 @@ require_once __DIR__ . '/config/auth.php';   // isAdmin() を使うため
   <span class="date-value" id="date-value"></span>
 </div>
 
-  <form class="search-form" id="name-search" role="search">
+<!-- 座席番号の登録(ボタンなし・Enterで確定) -->
+<form class="search-form number-register" id="number-register">
+  <label class="search-field">
+     <!-- <svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"> -->
+       <!-- <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"
+            stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+    </svg>   -->
+    <input
+      id="seat-number"
+      name="seat_number"
+      type="text"
+      inputmode="numeric"
+      placeholder="座席番号で登録"
+      aria-label="座席番号で登録"
+      autocomplete="off"
+    >
+  </label>
+</form>
+
+  <form class="search-form name-search" id="name-search" role="search">
     <label class="search-field">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none"
            aria-hidden="true">
@@ -25,14 +44,13 @@ require_once __DIR__ . '/config/auth.php';   // isAdmin() を使うため
         <path d="m16 16 5 5" stroke="currentColor"
               stroke-width="2.2" stroke-linecap="round"></path>
       </svg>
-
-      <input
+       <input
         id="name-query"
         name="name"
         type="search"
         placeholder="名前で検索"
         aria-label="名前で検索"
-      >
+      > 
     </label>
 
     <button class="search-button" type="submit">検索</button>
@@ -89,6 +107,8 @@ require_once __DIR__ . '/config/auth.php';   // isAdmin() を使うため
     });
 
   
+    
+  // 今日の日付を取得
   function updateHeaderDate() {
     const dateElement = document.getElementById("date-value");
 
