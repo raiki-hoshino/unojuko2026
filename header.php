@@ -1,4 +1,10 @@
-
+<?php
+// header.php の先頭あたり（PHPの部分）
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once __DIR__ . '/config/auth.php';   // isAdmin() を使うため
+?>
 <header class="site-header">
   <link rel="stylesheet" href="css/header.css">
   <a href="main.php" class="brand-main">
@@ -34,7 +40,9 @@
 
   <div class="header-actions">
     <a href="main.php" ><button class="zaseki-button" type="button" >座席画面</button></a>
-    <a href="admin.php"><button class="admin-button" type="button">管理画面</button></a>
+    <?php if (isAdmin()): ?>
+  <a href="admin.php"><button class="admin-button" type="button">管理画面</button></a>
+<?php endif; ?>
 
     <div class="header-divider"></div>
 
