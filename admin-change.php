@@ -1,9 +1,46 @@
 <?php
+// header.php の先頭あたり（PHPの部分）
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once __DIR__ . '/config/auth.php';   // isAdmin() を使うため
+
 //データベース
-require "config/database.php"; // ← $pdo（PDO）が使える前提
+require "config/database.php";
 
 if ($pdo === null) {
     echo "データベースに接続できません。";
+    exit;
+}
+
+ob_start(); // header.php の出力を一旦ためておく（JSON を返す処理では捨てるため）
+require "header.php";
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once __DIR__ . '/config/auth.php';
+
+/* ===== 管理者以外は使えない ===== */
+if (!isAdmin()) {
+    while (ob_get_level() > 0) {
+        ob_end_clean();
+    }
+    http_response_code(403);
+    if (($_POST['action'] ?? '') === 'save_seats') {
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode(['ok' => false, 'error' => '管理者のみ操作できます。'], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    ?>
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta charset="utf-8"><title>権限がありません</title></head>
+<body>
+<p><?= currentUserId() === null ? 'ログイン情報が見つかりません。ログインしてからお試しください。' : 'この画面は管理者のみ利用できます。' ?></p>
+<p><a href="main.php">座席図に戻る</a></p>
+</body>
+</html>
+<?php
     exit;
 }
 
@@ -19,6 +56,9 @@ $message = '';
 
 /* ===== 座席配置の保存（fetch から呼ばれる） ===== */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'save_seats') {
+    while (ob_get_level() > 0) {   // header.php の HTML は捨てて、JSON だけ返す
+        ob_end_clean();
+    }
     header('Content-Type: application/json; charset=UTF-8');
 
     $saveFloor = (int)($_POST['floor'] ?? 0);
@@ -30,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'save_
     if ($valid) {
         foreach ($posted as $s) {
             $num = trim((string)($s['seat_num'] ?? ''));
-            if ($num === '' || mb_strlen($num) > 20 || isset($clean[$num])) {
+            if ($num === '' || (function_exists('mb_strlen') ? mb_strlen($num) : strlen($num)) > 20 || isset($clean[$num])) {
                 $valid = false;
                 break;
             }
@@ -141,9 +181,15 @@ if (!in_array($floor, [1, 2, 3], true)) {
 $imageUrl = floorImageUrl($floor);
 
 // この階の座席
-$st = $pdo->prepare('SELECT seat_num, seat_x, seat_y FROM seat WHERE floor = ? ORDER BY seat_num');
-$st->execute([$floor]);
-$seats = $st->fetchAll(PDO::FETCH_ASSOC);
+$seats = [];
+try {
+    $st = $pdo->prepare('SELECT seat_num, seat_x, seat_y FROM seat WHERE floor = ? ORDER BY seat_num');
+    $st->execute([$floor]);
+    $seats = $st->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    // ※ 原因が分かるよう DB のエラー内容を表示（公開前に外してください）
+    $message = '座席データを読み込めません：' . $e->getMessage();
+}
 
 // seat_x / seat_y の「初期値（DEFAULT）」を取得：初期値のままの座席は未配置として扱う
 $seatDefault = ['seat_x' => null, 'seat_y' => null];
@@ -164,7 +210,7 @@ try {
     // 取得できなくても、NULL と 0,0 は未配置として扱うので動作は続行
 }
 
-require "header.php";
+ob_end_flush(); // ためておいた header.php の出力を、元と同じ位置（DOCTYPE の前）で出す
 ?>
 
 <!DOCTYPE html>
@@ -225,15 +271,7 @@ require "header.php";
     <button type="button" class="btn primary" id="save-seats">変更を保存</button>
     <p class="save-msg" id="save-msg" role="status"></p>
 </div>
-<!-- 下部: 未配置の座席置き場（読み込み直後・追加直後の座席がここに並ぶ） -->
-<section class="seat-tray" id="seat-tray-wrap" aria-label="未配置の座席">
-    <div class="tray-head">
-        <h2>未配置の座席</h2>
-        <span class="tray-count"><span id="tray-count">0</span>件</span>
-    </div>
-    <p class="tray-hint">座席カードを上の座席図へドラッグして配置します。配置済みの座席をここへドラッグして戻すこともできます。</p>
-    <div class="tray-list" id="seat-tray"></div>
-</section>
+
 <!-- 座席表（座席をドラッグして移動） -->
 <section class="main-panel" aria-label="<?= $floor ?>階の座席表">
     <div class="image-preview<?= $imageUrl ? ' has-image' : '' ?>">
@@ -249,7 +287,15 @@ require "header.php";
     </div>
 </section>
 
-
+<!-- 下部: 未配置の座席置き場（読み込み直後・追加直後の座席がここに並ぶ） -->
+<section class="seat-tray" id="seat-tray-wrap" aria-label="未配置の座席">
+    <div class="tray-head">
+        <h2>未配置の座席</h2>
+        <span class="tray-count"><span id="tray-count">0</span>件</span>
+    </div>
+    <p class="tray-hint">座席カードを上の座席図へドラッグして配置します。配置済みの座席をここへドラッグして戻すこともできます。</p>
+    <div class="tray-list" id="seat-tray"></div>
+</section>
 </main>
 </div>
 
