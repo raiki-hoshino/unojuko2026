@@ -3,9 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>座席管理</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="css/index.css">
 <script src="js/index.js" defer></script>
+
+  <!-- <h1 class="company-header">宇野重工</h1> -->
+
 </head>
 <body>
 
@@ -22,27 +26,27 @@ unset($_SESSION['people']);
 $sql=$pdo->prepare('select * from people where people_num=?');
 $sql->execute([$_REQUEST['people_num']]);
 
-foreach ($sql as $row) {
-  if (password_verify($_POST['password'], $row['password'])){
-    $_SESSION['people']=[
-        'people_id'=>$row['people_id'], 
-        'people_num'=>$row['people_num'],
-        'name'=>$row['name'],
-        'mail'=>$row['mail']
-    ];
-  session_regenerate_id(true);
+  foreach ($sql as $row) {
+    if (password_verify($_POST['password'], $row['password'])){
+      $_SESSION['people']=[
+          'people_id'=>$row['people_id'], 
+          'people_num'=>$row['people_num'],
+          'name'=>$row['name'],
+          'mail'=>$row['mail']
+      ];
+    session_regenerate_id(true);
+    }
   }
-}
-// ハッシュ化されたパスワードのままログインができてしまってる
+  // ハッシュ化されたパスワードのままログインができてしまってる
 
-if (isset($_SESSION['people'])) {
-    header('Location:main.php');
-    exit;
-} else{
-    echo '<div class="err-login">';
-    echo '<p>社員番号またはパスワードが間違っています</p>';
-    echo '</div>';
-}
+  if (isset($_SESSION['people'])) {
+      header('Location:main.php');
+      exit;
+  } else{
+      echo '<div class="err-login">';
+      echo '<p>社員番号またはパスワードが間違っています</p>';
+      echo '</div>';
+  }
 }
 ?>
 
@@ -59,7 +63,7 @@ if (isset($_SESSION['people'])) {
     <div class="form-group">
       <label for="password">パスワード</label>
       <div class="password-wrap">
-        <input type="password" class="password-input" id="password" name="password">
+        <input type="password" class="password-input" name="password">
         <!-- jsで表示 -->
         <img class="eye-close" src="image/icons8-invisible-48.png">
         <img class="eye-open" src="image/icons8-目に見える-48.png" style="display: none;">
