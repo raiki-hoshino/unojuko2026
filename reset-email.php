@@ -12,11 +12,17 @@
 <?php require "config/database.php" ?>
 <?php session_start(); ?>
 
+<?php 
+if (empty($_SESSION['people'])){
+  $_SESSION['people'] = bin2hex(random_bytes(32));
+}
+?>
+
 <div class="login-card">
   <h1>パスワード再設定</h1>
   <p class="login-lead">メールアドレスを入力してください。</p>
 
-  <form method="post">
+  <form action="reset-code.php" method="post">
     <div class="form-group">
       <label for="mail">メールアドレス</label>
       <input type="email" id="mail" name="mail">
@@ -28,10 +34,6 @@
   <p class="back-link"><a href="index.php">← ログイン画面に戻る</a></p>
 </div>
 <p class="login-footer">社内専用 座席管理システム</p>
-
-<?php 
-
-?>
 
 </body>
 </html>
